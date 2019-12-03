@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "File Compression", "File Compression\File Compression.csproj", "{352924EA-4CE1-47A6-9C71-9F5649AAB7D4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{352924EA-4CE1-47A6-9C71-9F5649AAB7D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{352924EA-4CE1-47A6-9C71-9F5649AAB7D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{352924EA-4CE1-47A6-9C71-9F5649AAB7D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{352924EA-4CE1-47A6-9C71-9F5649AAB7D4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
