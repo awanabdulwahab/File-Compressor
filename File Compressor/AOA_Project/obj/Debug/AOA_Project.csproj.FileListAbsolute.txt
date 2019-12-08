@@ -1,0 +1,9 @@
+C:\Users\abdul wahab awan\source\repos\AOA_Project\AOA_Project\obj\Debug\AOA_Project.csprojAssemblyReference.cache
+C:\Users\abdul wahab awan\source\repos\AOA_Project\AOA_Project\obj\Debug\AOA_Project.Properties.Resources.resources
+C:\Users\abdul wahab awan\source\repos\AOA_Project\AOA_Project\obj\Debug\AOA_Project.csproj.GenerateResource.cache
+C:\Users\abdul wahab awan\source\repos\AOA_Project\AOA_Project\obj\Debug\AOA_Project.Form1.resources
+C:\Users\abdul wahab awan\source\repos\AOA_Project\AOA_Project\bin\Debug\File compressor.exe.config
+C:\Users\abdul wahab awan\source\repos\AOA_Project\AOA_Project\bin\Debug\File compressor.exe
+C:\Users\abdul wahab awan\source\repos\AOA_Project\AOA_Project\bin\Debug\File compressor.pdb
+C:\Users\abdul wahab awan\source\repos\AOA_Project\AOA_Project\obj\Debug\File compressor.exe
+C:\Users\abdul wahab awan\source\repos\AOA_Project\AOA_Project\obj\Debug\File compressor.pdb
