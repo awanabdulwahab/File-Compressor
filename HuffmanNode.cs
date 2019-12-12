@@ -6,50 +6,58 @@ using System.Threading.Tasks;
 
 namespace AOA_Project
 {
-    class HuffmanNode<T> :IComparable
-    { 
-            internal HuffmanNode(double probability, T value)
+    public class Node
+    {
+        public char Symbol { get; set; }
+        public int Frequency { get; set; }
+        public Node Right { get; set; }
+        public Node Left { get; set; }
+
+        public List<bool> Traverse(char symbol, List<bool> data)
+        {
+            // Leaf
+            if (Right == null && Left == null)
             {
-                Probability = probability;
-                LeftSon = RightSon = Parent = null;
-                Value = value;
-                IsLeaf = true;
+                if (symbol.Equals(this.Symbol))
+                {
+                    return data;
+                }
+                else
+                {
+                    return null;
+                }
             }
-
-            internal HuffmanNode(HuffmanNode<T> leftSon, HuffmanNode<T> rightSon)
+            else
             {
-                LeftSon = leftSon;
-                RightSon = rightSon;
-                Probability = leftSon.Probability + rightSon.Probability;
-                leftSon.IsZero = true;
-                rightSon.IsZero = false;
-                leftSon.Parent = rightSon.Parent = this;
-                IsLeaf = false;
-            }
+                List<bool> left = null;
+                List<bool> right = null;
 
-            internal HuffmanNode<T> LeftSon { get; set; }
-            internal HuffmanNode<T> RightSon { get; set; }
-            internal HuffmanNode<T> Parent { get; set; }
-            internal T Value { get; set; }
-            internal bool IsLeaf { get; set; }
+                if (Left != null)
+                {
+                    List<bool> leftPath = new List<bool>();
+                    leftPath.AddRange(data);
+                    leftPath.Add(false);
 
-            internal bool IsZero { get; set; }
+                    left = Left.Traverse(symbol, leftPath);
+                }
 
-            internal int Bit
-            {
-                get { return IsZero ? 0 : 1; }
-            }
+                if (Right != null)
+                {
+                    List<bool> rightPath = new List<bool>();
+                    rightPath.AddRange(data);
+                    rightPath.Add(true);
+                    right = Right.Traverse(symbol, rightPath);
+                }
 
-            internal bool IsRoot
-            {
-                get { return Parent == null; }
-            }
-
-            internal double Probability { get; set; }
-
-            public int CompareTo(object obj)
-            {
-                return -Probability.CompareTo(((HuffmanNode<T>)obj).Probability);
+                if (left != null)
+                {
+                    return left;
+                }
+                else
+                {
+                    return right;
+                }
             }
         }
+    }
 }
