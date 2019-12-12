@@ -6,107 +6,110 @@ using System.Threading.Tasks;
 
 namespace AOA_Project
 {
-    class Huffman<T> where T:IComparable
+    public class HuffmanTree
     {
-        private readonly Dictionary<T, HuffmanNode<T>> _leafDictionary = new Dictionary<T, HuffmanNode<T>>();
-        private readonly HuffmanNode<T> _root;
-        public Huffman(IEnumerable<T> values)
+        private List<Node> nodes = new List<Node>();
+        public Node Root { get; set; }
+        public Dictionary<char, int> Frequencies = new Dictionary<char, int>();
+
+        public void Build(string source)
         {
-            var counts = new Dictionary<T, int>();
-            var priorityQueue = new PriorityQueue<HuffmanNode<T>>();
-
-            int valueCount = 0;
-
-            foreach (T value in values)
+            for (int i = 0; i < source.Length; i++)
             {
-                if (!counts.ContainsKey(value))
+                if (!Frequencies.ContainsKey(source[i]))
                 {
-                    counts[value] = 0;
+                    Frequencies.Add(source[i], 0);
                 }
-                counts[value]++;
-                valueCount++;
+
+                Frequencies[source[i]]++;
             }
 
-            foreach (T value in counts.Keys)
+            foreach (KeyValuePair<char, int> symbol in Frequencies)
             {
-                var node = new HuffmanNode<T>((double)counts[value] / valueCount, value);
-                priorityQueue.Add(node);
-                _leafDictionary[value] = node;
+                nodes.Add(new Node() { Symbol = symbol.Key, Frequency = symbol.Value });
             }
 
-            while (priorityQueue.Count > 1)
+            while (nodes.Count > 1)
             {
-                HuffmanNode<T> leftSon = priorityQueue.Pop();
-                HuffmanNode<T> rightSon = priorityQueue.Pop();
-                var parent = new HuffmanNode<T>(leftSon, rightSon);
-                priorityQueue.Add(parent);
-            }
+                List<Node> orderedNodes = nodes.OrderBy(node => node.Frequency).ToList<Node>();
 
-            _root = priorityQueue.Pop();
-            _root.IsZero = false;
-        }
-
-        public List<int> Encode(T value)
-        {
-            var returnValue = new List<int>();
-            Encode(value, returnValue);
-            return returnValue;
-        }
-
-        public void Encode(T value, List<int> encoding)
-        {
-            if (!_leafDictionary.ContainsKey(value))
-            {
-                throw new ArgumentException("Invalid value in Encode");
-            }
-            HuffmanNode<T> nodeCur = _leafDictionary[value];
-            var reverseEncoding = new List<int>();
-            while (!nodeCur.IsRoot)
-            {
-                reverseEncoding.Add(nodeCur.Bit);
-                nodeCur = nodeCur.Parent;
-            }
-
-            reverseEncoding.Reverse();
-            encoding.AddRange(reverseEncoding);
-        }
-
-        public List<int> Encode(IEnumerable<T> values)
-        {
-            var returnValue = new List<int>();
-
-            foreach (T value in values)
-            {
-                Encode(value, returnValue);
-            }
-            return returnValue;
-        }
-
-        public T Decode(List<int> bitString, ref int position)
-        {
-            HuffmanNode<T> nodeCur = _root;
-            while (!nodeCur.IsLeaf)
-            {
-                if (position > bitString.Count)
+                if (orderedNodes.Count >= 2)
                 {
-                    throw new ArgumentException("Invalid bitstring in Decode");
+                    // Take first two items
+                    List<Node> taken = orderedNodes.Take(2).ToList<Node>();
+
+                    // Create a parent node by combining the frequencies
+                    Node parent = new Node()
+                    {
+                        Symbol = '*',
+                        Frequency = taken[0].Frequency + taken[1].Frequency,
+                        Left = taken[0],
+                        Right = taken[1]
+                    };
+
+                    nodes.Remove(taken[0]);
+                    nodes.Remove(taken[1]);
+                    nodes.Add(parent);
                 }
-                nodeCur = bitString[position++] == 0 ? nodeCur.LeftSon : nodeCur.RightSon;
+
+                this.Root = nodes.FirstOrDefault();
+
             }
-            return nodeCur.Value;
+
         }
 
-        public List<T> Decode(List<int> bitString)
+        public BitArray Encode(string source)
         {
-            int position = 0;
-            var returnValue = new List<T>();
+            List<bool> encodedSource = new List<bool>();
 
-            while (position != bitString.Count)
+            for (int i = 0; i < source.Length; i++)
             {
-                returnValue.Add(Decode(bitString, ref position));
+                List<bool> encodedSymbol = this.Root.Traverse(source[i], new List<bool>());
+                encodedSource.AddRange(encodedSymbol);
             }
-            return returnValue;
+
+            BitArray bits = new BitArray(encodedSource.ToArray());
+
+            return bits;
         }
+
+        public string Decode(BitArray bits)
+        {
+            Node current = this.Root;
+            string decoded = "";
+
+            foreach (bool bit in bits)
+            {
+                if (bit)
+                {
+                    if (current.Right != null)
+                    {
+                        current = current.Right;
+                    }
+                }
+                else
+                {
+                    if (current.Left != null)
+                    {
+                        current = current.Left;
+                    }
+                }
+
+                if (IsLeaf(current))
+                {
+                    decoded += current.Symbol;
+                    current = this.Root;
+                }
+            }
+
+            return decoded;
+        }
+
+        public bool IsLeaf(Node node)
+        {
+            return (node.Left == null && node.Right == null);
+        }
+
     }
 }
 
